@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+.venv/
+venv/
+env/
+.env
+
+# ML model weights / artifacts (large binaries — never push)
+emotion_classifier/app/classification_model/
+emotion_classifier/huggingface_models/
+
+# Or, more robustly, ignore model binaries anywhere by extension:
+*.bin
+*.h5
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.onnx
