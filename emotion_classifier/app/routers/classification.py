@@ -15,4 +15,4 @@ async def classify_journal_entry(
 @router.get("/health", status_code=200)
 async def health_check(service: ClassificationService = Depends()):
     check: ClassificationResult = service.classify("Hello")
-    return None
+    return {"status": "UP"}
