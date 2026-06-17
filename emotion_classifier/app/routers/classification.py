@@ -11,3 +11,8 @@ async def classify_journal_entry(
         service: ClassificationService = Depends()
 ):
     return service.classify(entry.content)
+
+@router.get("/health", status_code=200)
+async def health_check(service: ClassificationService = Depends()):
+    check: ClassificationResult = service.classify("Hello")
+    return None
