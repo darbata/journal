@@ -5,11 +5,13 @@ __pycache__/
 venv/
 env/
 .env
+.idea
 
 emotion_classifier/app/classification_model/
 emotion_classifier/huggingface_models/
 models
 model
+
 
 *.bin
 *.h5
