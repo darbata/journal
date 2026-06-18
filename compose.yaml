@@ -1,0 +1,15 @@
+services:
+  # api:
+  #   image: journal-api:latest
+  #   environment:
+  #     DB_URL: db
+  db:
+    image: postgres:18
+    ports:
+      - "5432:5432"
+    volumes:
+      - ${PWD}/init/init-db:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: dbpass
+      POSTGRES_DB: journal
