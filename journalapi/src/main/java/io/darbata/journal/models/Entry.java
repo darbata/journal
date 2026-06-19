@@ -23,12 +23,12 @@ public class Entry {
         this.updatedAt = updatedAt;
     }
 
-    public Entry create(UserID authorId, String title, String content) {
+    public static Entry create(UserID authorId, String title, String content) {
         UUID id = UUID.randomUUID();
         return new Entry(id, authorId, title, content, Instant.now(), Instant.now());
     }
 
-    public Entry load(
+    public static Entry load(
             UUID id, UserID authorId, String title, String content, Instant createdAt, Instant updatedAt
     ) {
         return new Entry(id, authorId, title, content, createdAt, updatedAt);
