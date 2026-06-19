@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS entries (
-    UUID PRIMARY KEY id,
-    TEXT author_id,
-    VARCHAR(32) title,
-    VARCHAR(2048) TEXT content,
-    JSONB emotions,
-    TIMESTAMPTZ createdAt,
-    TIMESTAMPTZ updatedAt,
+    id UUID PRIMARY KEY,
+    author_id TEXT,
+    title VARCHAR(32),
+    content VARCHAR(2048),
+    emotions JSONB,
+    created_at TIMESTAMPTZ,
+    updated_at TIMESTAMPTZ 
 );
 
 INSERT INTO entries (id, author_id, title, content, emotions, created_at, updated_at) VALUES
