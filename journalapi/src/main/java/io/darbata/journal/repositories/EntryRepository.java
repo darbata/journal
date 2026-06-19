@@ -4,13 +4,16 @@ import io.darbata.journal.models.Entry;
 import io.darbata.journal.models.UserID;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface EntryRepository {
-    Entry create(Entry entry);
-    Entry findById(String id);
-    List<Entry> findAllByUserID(UserID userID);
-    Entry update(Entry entry);
-    void delete(Entry entry);
+    void create(Entry entry);
+    Optional<Entry> findById(UUID id);
+    List<Entry> findAllByUserID(UserID userID, Instant from, int limit);
+    void update(Entry entry);
+    void delete(UUID id);
 }
