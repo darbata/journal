@@ -28,7 +28,14 @@ public class JbcEntryRepository implements EntryRepository {
 
     @Override
     public List<Entry> findAllByUserID(UserID userID) {
-        return List.of();
+        String query = """
+            SELECT * FROM entries WHERE author_id = :id
+        """;
+
+        return client.sql(query)
+                .param("id", userID.getId())
+                .query(Entry.class)
+                .list();
     }
 
     @Override
