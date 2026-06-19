@@ -1,22 +1,19 @@
 package io.darbata.journal.controllers;
 
+import io.darbata.journal.dto.CreateEntryRequest;
 import io.darbata.journal.dto.EntryDTO;
 import io.darbata.journal.services.EntryService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/entries")
 class JournalController {
 
-    private static final Logger log = LoggerFactory.getLogger(JournalController.class);
     private final EntryService entryService;
 
     public JournalController(EntryService entryService) {
@@ -28,8 +25,36 @@ class JournalController {
             @RequestHeader("X-User") String userId
     ) {
         List<EntryDTO> dto = entryService.findAllByUserId(userId);
-        log.trace("findAllEntriesByUserId({})", userId);
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EntryDTO> findById(
+            @RequestHeader("X-User") String userId,
+            @PathVariable UUID id
+    ) {
+        EntryDTO dto = entryService.findById(id);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<EntryDTO> createEntry(
+            @RequestHeader("X-User") String authorId,
+            @RequestBody CreateEntryRequest request
+    ) {
+        EntryDTO dto = entryService.create(authorId, request.title(), request.content());
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(
+            @RequestHeader("X-User") String userId,
+            @PathVariable UUID id
+    ) {
+        entryService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 }
