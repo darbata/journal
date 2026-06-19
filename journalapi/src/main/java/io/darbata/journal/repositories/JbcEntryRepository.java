@@ -1,7 +1,7 @@
 package io.darbata.journal.repositories;
 
-import io.darbata.journal.model.Entry;
-import io.darbata.journal.model.UserID;
+import io.darbata.journal.models.Entry;
+import io.darbata.journal.models.UserID;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 

@@ -9,7 +9,6 @@ env/
 
 emotion_classifier/app/classification_model/
 emotion_classifier/huggingface_models/
-models
 model
 
 
