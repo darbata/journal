@@ -6,5 +6,4 @@ CREATE TABLE IF NOT EXISTS entries (
     JSONB emotions,
     TIMESTAMPTZ createdAt,
     TIMESTAMPTZ updatedAt,
-    TIMESTAMPTZ lastReadAt,
 );
