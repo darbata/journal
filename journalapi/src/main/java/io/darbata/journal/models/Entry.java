@@ -1,5 +1,7 @@
 package io.darbata.journal.models;
 
+import org.springframework.boot.jackson.autoconfigure.JacksonProperties.Json;
+
 import java.time.Instant;
 import java.util.UUID;
 
@@ -9,29 +11,33 @@ public class Entry {
     private final UserID authorId;
     private String title;
     private String content;
+    private EmotionClassificationResult emotions;
     private final Instant createdAt;
     private Instant updatedAt;
 
     private Entry(
-            UUID id, UserID authorId, String title, String content, Instant createdAt, Instant updatedAt
+            UUID id, UserID authorId, String title, String content, EmotionClassificationResult emotions,
+            Instant createdAt, Instant updatedAt
     ) {
         this.id = id;
         this.authorId = authorId;
         this.title = title;
         this.content = content;
+        this.emotions = emotions;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
     public static Entry create(UserID authorId, String title, String content) {
         UUID id = UUID.randomUUID();
-        return new Entry(id, authorId, title, content, Instant.now(), Instant.now());
+        return new Entry(id, authorId, title, content, null, Instant.now(), Instant.now());
     }
 
     public static Entry load(
-            UUID id, UserID authorId, String title, String content, Instant createdAt, Instant updatedAt
+            UUID id, UserID authorId, String title, String content, EmotionClassificationResult emotions,
+            Instant createdAt, Instant updatedAt
     ) {
-        return new Entry(id, authorId, title, content, createdAt, updatedAt);
+        return new Entry(id, authorId, title, content, emotions, createdAt, updatedAt);
     }
 
     public UUID getId() {
@@ -54,6 +60,14 @@ public class Entry {
         return content;
     }
 
+    public EmotionClassificationResult getEmotions() {
+        return emotions;
+    }
+
+    public void setEmotions(EmotionClassificationResult emotions) {
+        this.emotions = emotions;
+    }
+
     public void setContent(String content) {
         this.content = content;
     }
@@ -69,5 +83,6 @@ public class Entry {
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 
 }
