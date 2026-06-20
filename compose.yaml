@@ -13,3 +13,8 @@ services:
       POSTGRES_USER: dbuser
       POSTGRES_PASSWORD: dbpass
       POSTGRES_DB: journal
+  broker:
+    image: rabbitmq:4.3.2-management
+    ports:
+      - "5672:5674"
+      - "15672:15672" # for browser management interface
