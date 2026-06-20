@@ -1,7 +1,10 @@
 package io.darbata.journal.services;
 
 import io.darbata.journal.dto.EntryDTO;
+import io.darbata.journal.events.EntryCreatedEvent;
 import io.darbata.journal.exceptions.EntryNotFoundException;
+import io.darbata.journal.messaging.JournalEventSender;
+import io.darbata.journal.models.EmotionClassificationResult;
 import io.darbata.journal.models.Entry;
 import io.darbata.journal.models.UserID;
 import io.darbata.journal.repositories.EntryRepository;
@@ -15,14 +18,20 @@ import java.util.UUID;
 public class EntryService {
 
     private final EntryRepository entryRepository;
+    private final JournalEventSender journalEventSender;
 
-    public EntryService(EntryRepository entryRepository) {
+    public EntryService(EntryRepository entryRepository, JournalEventSender journalEventSender) {
         this.entryRepository = entryRepository;
+        this.journalEventSender = journalEventSender;
     }
 
     public EntryDTO create(String authorId, String title, String content) {
-        Entry entry = Entry.create(UserID.of(authorId), title, content);
+ Entry entry = Entry.create(UserID.of(authorId), title, content);
+
         this.entryRepository.create(entry);
+
+        // journalEventSender.sendEntryCreatedEvent(EntryCreatedEvent.from(entry.getId()));
+
         return entryModelToDTO(entry);
     }
 
@@ -49,10 +58,15 @@ public class EntryService {
 
         entry.setTitle(updatedTitle);
         entry.setContent(updatedContent);
+        entry.setUpdatedAt(Instant.now());
 
         this.entryRepository.update(entry);
 
         return entryModelToDTO(entry);
+    }
+
+    public EntryDTO assignEmotionsById(UUID id, EmotionClassificationResult emotions) {
+        return null;
     }
 
     public void delete(UUID id) {
@@ -60,7 +74,7 @@ public class EntryService {
     }
 
     private EntryDTO entryModelToDTO (Entry e) {
-        return new EntryDTO(e.getId(), e.getAuthorId().getId(), e.getTitle(), e.getContent(), e.getCreatedAt(),
+        return new EntryDTO(e.getId(), e.getAuthorId().getId(), e.getTitle(), e.getContent(), e.getEmotions(), e.getCreatedAt(),
                 e.getUpdatedAt());
     }
 
