@@ -1,12 +1,21 @@
 package io.darbata.journal.repositories;
 
+import io.darbata.journal.models.EmotionClassificationResult;
 import io.darbata.journal.models.Entry;
 import io.darbata.journal.models.UserID;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,9 +23,11 @@ import java.util.UUID;
 public class JbcEntryRepository implements EntryRepository {
 
     private final JdbcClient client;
+    private final JsonMapper jsonMapper;
 
-    public JbcEntryRepository(JdbcClient client) {
+    public JbcEntryRepository(JdbcClient client, JsonMapper jsonMapper) {
         this.client = client;
+        this.jsonMapper = jsonMapper;
     }
 
     @Override
@@ -28,11 +39,11 @@ public class JbcEntryRepository implements EntryRepository {
 
         client.sql(sql)
                 .param("id", entry.getId())
-                .param("authorId", entry.getAuthorId())
+                .param("authorId", entry.getAuthorId().getId())
                 .param("title", entry.getTitle())
                 .param("content", entry.getContent())
-                .param("createdAt", entry.getCreatedAt())
-                .param("updatedAt", entry.getUpdatedAt())
+                .param("createdAt", entry.getCreatedAt().atOffset(ZoneOffset.UTC))
+                .param("updatedAt", entry.getUpdatedAt().atOffset(ZoneOffset.UTC))
                 .update();
     }
 
@@ -44,7 +55,7 @@ public class JbcEntryRepository implements EntryRepository {
 
         return client.sql(sql)
                 .param("id", id)
-                .query(Entry.class)
+                .query(new EntryRowMapper(jsonMapper))
                 .optional();
     }
 
@@ -61,9 +72,9 @@ public class JbcEntryRepository implements EntryRepository {
 
         return client.sql(sql)
                 .param("id", userID.getId())
-                .param("from", from)
+                .param("from", from.atOffset(ZoneOffset.UTC))
                 .param("limit", limit)
-                .query(Entry.class)
+                .query(new EntryRowMapper(jsonMapper))
                 .list();
     }
 
@@ -78,7 +89,7 @@ public class JbcEntryRepository implements EntryRepository {
                 .param("id", entry.getId())
                 .param("title", entry.getTitle())
                 .param("content", entry.getContent())
-                .param("updatedAt", entry.getUpdatedAt())
+                .param("updatedAt", entry.getUpdatedAt().atOffset(ZoneOffset.UTC))
                 .update();
     }
 
@@ -91,5 +102,37 @@ public class JbcEntryRepository implements EntryRepository {
         client.sql(sql)
                 .param("id", id)
                 .update();
+    }
+
+    private static class EntryRowMapper implements RowMapper<Entry> {
+
+        private final JsonMapper jsonMapper;
+
+        private EntryRowMapper(JsonMapper jsonMapper) {
+            this.jsonMapper = jsonMapper;
+        }
+
+
+        @Override
+        public Entry mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+
+            return Entry.load(
+                    rs.getObject("id", UUID.class),
+                    UserID.of(rs.getString("author_id")),
+                    rs.getString("title"),
+                    rs.getString("content"),
+                    parseEmotionsJson(rs.getString("emotions")),
+                    rs.getObject("created_at", OffsetDateTime.class).toInstant(),
+                    rs.getObject("updated_at", OffsetDateTime.class).toInstant()
+
+            );
+        }
+
+        private EmotionClassificationResult parseEmotionsJson(String json) {
+            if (json == null) return null;
+            Map<EmotionClassificationResult.Emotion, Double> scores = jsonMapper.readValue(json, new TypeReference<>() {});
+            return new EmotionClassificationResult(scores);
+        }
     }
 }
