@@ -1,14 +1,14 @@
-package io.darbata.journal.messaging;
+package io.darbata.journal.amqp;
 
 import io.darbata.journal.events.EntryCreatedEvent;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
-@Service
+@Component
 public class JournalEventSender {
+
 
     private final AmqpAdmin amqpAdmin;
     private final AmqpTemplate amqpTemplate;

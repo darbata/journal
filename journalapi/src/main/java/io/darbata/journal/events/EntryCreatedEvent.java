@@ -8,4 +8,11 @@ public record EntryCreatedEvent(
     public static EntryCreatedEvent from (UUID entryId) {
         return new EntryCreatedEvent(entryId);
     }
+
+    @Override
+    public String toString() {
+        return "EntryCreatedEvent{" +
+                "entryId=" + entryId +
+                '}';
+    }
 }

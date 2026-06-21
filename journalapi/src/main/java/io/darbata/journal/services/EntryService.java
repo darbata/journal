@@ -1,8 +1,9 @@
 package io.darbata.journal.services;
 
 import io.darbata.journal.dto.EntryDTO;
+import io.darbata.journal.events.EntryCreatedEvent;
 import io.darbata.journal.exceptions.EntryNotFoundException;
-import io.darbata.journal.messaging.JournalEventSender;
+import io.darbata.journal.amqp.JournalEventSender;
 import io.darbata.journal.models.EmotionClassificationResult;
 import io.darbata.journal.models.Entry;
 import io.darbata.journal.models.UserID;
@@ -30,7 +31,7 @@ public class EntryService {
 
         this.entryRepository.create(entry);
 
-        // journalEventSender.sendEntryCreatedEvent(EntryCreatedEvent.from(entry.getId()));
+        journalEventSender.sendEntryCreatedEvent(EntryCreatedEvent.from(entry.getId()));
 
         return entryModelToDTO(entry);
     }
@@ -65,15 +66,8 @@ public class EntryService {
         return entryModelToDTO(entry);
     }
 
-    @Transactional
-    public EntryDTO assignEmotionsById(UUID id, EmotionClassificationResult emotions) {
+    public void assignEmotionsById(UUID id, EmotionClassificationResult emotions) {
         entryRepository.updateEmotionsById(id, emotions);
-
-        Entry entry = entryRepository.findById(id).orElseThrow(
-                () -> new EntryNotFoundException("Entry of id " + id + " was not found"));
-
-        return entryModelToDTO(entry);
-
     }
 
     public void delete(UUID id) {
