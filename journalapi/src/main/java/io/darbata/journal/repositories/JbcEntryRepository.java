@@ -94,6 +94,19 @@ public class JbcEntryRepository implements EntryRepository {
     }
 
     @Override
+    public void updateEmotionsById(UUID id, EmotionClassificationResult emotions) {
+        String sql = """
+        UPDATE entries SET emotions = :emotions::jsonb
+        WHERE id = :id
+    """;
+
+        client.sql(sql)
+                .param("id", id)
+                .param("emotions", jsonMapper.writeValueAsString(emotions.scores()))
+                .update();
+    }
+
+    @Override
     public void delete(UUID id) {
         String sql = """
             DELETE FROM entries WHERE id = :id
@@ -111,7 +124,6 @@ public class JbcEntryRepository implements EntryRepository {
         private EntryRowMapper(JsonMapper jsonMapper) {
             this.jsonMapper = jsonMapper;
         }
-
 
         @Override
         public Entry mapRow(ResultSet rs, int rowNum) throws SQLException {
