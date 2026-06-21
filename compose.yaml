@@ -16,5 +16,5 @@ services:
   broker:
     image: rabbitmq:4.3.2-management
     ports:
-      - "5672:5674"
+      - "5672:5672"
       - "15672:15672" # for browser management interface
