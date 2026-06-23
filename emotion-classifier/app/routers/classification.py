@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
-from app.schemas.classification_result import ClassificationResult
+
+from app.config.ml_models import ml_models
 from app.schemas.journal_entry import JournalEntry
 from app.services.classification import ClassificationService
 
@@ -13,6 +14,6 @@ async def classify_journal_entry(
     return service.classify(entry.content)
 
 @router.get("/health", status_code=200)
-async def health_check(service: ClassificationService = Depends()):
-    check: ClassificationResult = service.classify("Hello")
-    return {"status": "UP"}
+async def health_check():
+    ready = "emotion_classifier" in ml_models
+    return {"status": "UP" if ready else "DOWN"}
