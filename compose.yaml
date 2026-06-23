@@ -1,8 +1,4 @@
 services:
-  # api:
-  #   image: journal-api:latest
-  #   environment:
-  #     DB_URL: db
   db:
     image: postgres:18
     ports:
@@ -13,8 +9,49 @@ services:
       POSTGRES_USER: dbuser
       POSTGRES_PASSWORD: dbpass
       POSTGRES_DB: journal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dbuser -d journal"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   broker:
     image: rabbitmq:4.3.2-management
     ports:
       - "5672:5672"
       - "15672:15672" # for browser management interface
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+  classifier:
+    image: classifier:latest
+    ports:
+      - "8081:8080"
+    environment:
+      BROKER_URL: "amqp://guest:guest@broker:5672/"
+      JOURNAL_API_URL: "http://journalapi:8080/api"
+    depends_on:
+      broker:
+        condition: service_healthy
+        restart: true
+  journalapi:
+    image: journalapi:latest
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_JSON: >-
+        {"spring.datasource.url":"jdbc:postgresql://db:5432/journal",
+         "spring.datasource.username":"dbuser",
+         "spring.datasource.password":"dbpass",
+         "spring.rabbitmq.host":"broker",
+         "spring.rabbitmq.port":5672,
+         "spring.rabbitmq.username":"guest",
+         "spring.rabbitmq.password":"guest"}
+    depends_on:
+      broker:
+        condition: service_healthy
+      db:
+        condition: service_healthy
