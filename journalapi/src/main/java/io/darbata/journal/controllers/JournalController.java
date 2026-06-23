@@ -28,6 +28,14 @@ class JournalController {
         return ResponseEntity.ok(dto);
     }
 
+    @GetMapping("/{id}/internal")
+    public ResponseEntity<EntryDTO> findByIdInternal(
+            @PathVariable UUID id
+    ) {
+        EntryDTO dto = entryService.findById(id);
+        return ResponseEntity.ok(dto);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<EntryDTO> findById(
             @RequestHeader("X-User") String userId,
