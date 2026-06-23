@@ -9,7 +9,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class JournalEventReceiver {
 
-    EntryService entryService;
+    private final EntryService entryService;
+
+    public JournalEventReceiver(EntryService entryService) {
+        this.entryService = entryService;
+    }
 
     @RabbitListener(queues="entries.classifications")
     public void processEmotionClassification(ClassificationEvent event) {
