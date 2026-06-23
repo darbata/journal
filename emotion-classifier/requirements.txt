@@ -2,3 +2,5 @@ fastapi[standard]
 pydantic
 torch
 transformers
+aio_pika
+requests
