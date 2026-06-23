@@ -14,14 +14,6 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitConfig {
 
     @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory factory = new CachingConnectionFactory("localhost");
-        factory.setUsername("guest");
-        factory.setPassword("guest");
-        return factory;
-    }
-
-    @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory cf) {
         RabbitTemplate rt = new RabbitTemplate(cf);
         rt.setMessageConverter(jsonMessageConverter()); // JSON converter
