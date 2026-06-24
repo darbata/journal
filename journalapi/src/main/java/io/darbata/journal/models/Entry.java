@@ -1,6 +1,7 @@
 package io.darbata.journal.models;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -33,7 +34,7 @@ public class Entry {
 
     public static Entry create(UserID authorId, String title, String content) {
         UUID id = UUID.randomUUID();
-        return new Entry(id, authorId, title, content, null, null, false, Instant.now(), Instant.now());
+        return new Entry(id, authorId, title, content, Emotion.NONE, new HashMap<>(), false, Instant.now(), Instant.now());
     }
 
     public static Entry load(
@@ -41,14 +42,18 @@ public class Entry {
             Instant createdAt, Instant updatedAt
     ) {
 
-        Emotion dominant = Emotion.ANGER;
+        if (emotions == null) { emotions = new HashMap<>(); }
 
-        double maxScore = Double.MIN_VALUE;
+        Emotion dominant = Emotion.NONE;
 
-        for (var score : emotions.entrySet()) {
-            if (maxScore < score.getValue()) {
-                maxScore = score.getValue();
-                dominant = score.getKey();
+        if (!emotions.isEmpty()) {
+            double maxScore = Double.MIN_VALUE;
+
+            for (var score : emotions.entrySet()) {
+                if (maxScore < score.getValue()) {
+                    maxScore = score.getValue();
+                    dominant = score.getKey();
+                }
             }
         }
 
