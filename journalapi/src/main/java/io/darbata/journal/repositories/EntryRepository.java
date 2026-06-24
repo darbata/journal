@@ -17,6 +17,5 @@ public interface EntryRepository {
     Optional<Entry> findById(UUID id);
     List<Entry> findAllByUserID(UserID userID, Instant from, int limit);
     void update(Entry entry);
-    void updateEmotionsById(UUID id, Map<Emotion, Double> emotions);
     void delete(UUID id);
 }

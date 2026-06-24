@@ -81,7 +81,8 @@ public class JbcEntryRepository implements EntryRepository {
     @Override
     public void update(Entry entry) {
         String sql = """
-            UPDATE entries SET title = :title, content = :content, updated_at = :updatedAt
+            UPDATE entries
+            SET title = :title, content = :content, updated_at = :updatedAt, emotions = :emotions::jsonb
             WHERE id = :id
         """;
 
@@ -90,19 +91,7 @@ public class JbcEntryRepository implements EntryRepository {
                 .param("title", entry.getTitle())
                 .param("content", entry.getContent())
                 .param("updatedAt", entry.getUpdatedAt().atOffset(ZoneOffset.UTC))
-                .update();
-    }
-
-    @Override
-    public void updateEmotionsById(UUID id, Map<Emotion, Double> emotions) {
-        String sql = """
-        UPDATE entries SET emotions = :emotions::jsonb
-        WHERE id = :id
-    """;
-
-        client.sql(sql)
-                .param("id", id)
-                .param("emotions", jsonMapper.writeValueAsString(emotions))
+                .param("emotions", jsonMapper.writeValueAsString(entry.getEmotions()))
                 .update();
     }
 

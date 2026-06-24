@@ -67,7 +67,13 @@ public class EntryService {
     }
 
     public void assignEmotionsById(UUID id, Map<Emotion, Double> emotions) {
-        entryRepository.updateEmotionsById(id, emotions);
+
+        Entry entry = entryRepository.findById(id)
+                .orElseThrow(() -> new EntryNotFoundException("Entry of id " + id + " was not found"));
+
+        entry.setEmotions(emotions);
+
+        this.entryRepository.update(entry);
     }
 
     public void delete(UUID id) {
