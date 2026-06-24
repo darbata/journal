@@ -1,7 +1,5 @@
 package io.darbata.journal.models;
 
-import org.springframework.boot.jackson.autoconfigure.JacksonProperties.Json;
-
 import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
@@ -12,33 +10,50 @@ public class Entry {
     private final UserID authorId;
     private String title;
     private String content;
+    private final Emotion dominant;
     private Map<Emotion, Double> emotions;
+    private final boolean analysed;
     private final Instant createdAt;
     private Instant updatedAt;
 
     private Entry(
-            UUID id, UserID authorId, String title, String content, Map<Emotion, Double> emotions,
-            Instant createdAt, Instant updatedAt
+            UUID id, UserID authorId, String title, String content, Emotion dominant, Map<Emotion, Double> emotions,
+            boolean analysed, Instant createdAt, Instant updatedAt
     ) {
         this.id = id;
         this.authorId = authorId;
         this.title = title;
         this.content = content;
+        this.dominant = dominant;
         this.emotions = emotions;
+        this.analysed = analysed;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
     public static Entry create(UserID authorId, String title, String content) {
         UUID id = UUID.randomUUID();
-        return new Entry(id, authorId, title, content, null, Instant.now(), Instant.now());
+        return new Entry(id, authorId, title, content, null, null, false, Instant.now(), Instant.now());
     }
 
     public static Entry load(
             UUID id, UserID authorId, String title, String content, Map<Emotion, Double> emotions,
             Instant createdAt, Instant updatedAt
     ) {
-        return new Entry(id, authorId, title, content, emotions, createdAt, updatedAt);
+
+        Emotion dominant = Emotion.ANGER;
+
+        double maxScore = Double.MIN_VALUE;
+
+        for (var score : emotions.entrySet()) {
+            if (maxScore < score.getValue()) {
+                maxScore = score.getValue();
+                dominant = score.getKey();
+            }
+        }
+
+        return new Entry(id, authorId, title, content, dominant, emotions, !emotions.isEmpty(), createdAt, updatedAt);
+
     }
 
     public UUID getId() {
@@ -61,6 +76,10 @@ public class Entry {
         return content;
     }
 
+    public Emotion getDominant() {
+        return dominant;
+    }
+
     public Map<Emotion, Double> getEmotions() {
         return emotions;
     }
@@ -69,9 +88,14 @@ public class Entry {
         this.emotions = emotions;
     }
 
+    public boolean isAnalysed() {
+        return analysed;
+    }
+
     public void setContent(String content) {
         this.content = content;
     }
+
 
     public Instant getCreatedAt() {
         return createdAt;
@@ -84,6 +108,7 @@ public class Entry {
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 
 
 }
