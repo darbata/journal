@@ -11,7 +11,9 @@ public record EntryDTO(
         String authorId,
         String title,
         String content,
+        Emotion dominant,
         Map<Emotion, Double> scores,
+        boolean analysed,
         Instant createdAt,
         Instant updatedAt
 ) { }

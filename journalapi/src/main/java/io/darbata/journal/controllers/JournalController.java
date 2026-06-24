@@ -1,6 +1,7 @@
 package io.darbata.journal.controllers;
 
 import io.darbata.journal.dto.CreateEntryRequest;
+import io.darbata.journal.dto.EntryContentDTO;
 import io.darbata.journal.dto.EntryDTO;
 import io.darbata.journal.services.EntryService;
 import org.springframework.http.HttpStatus;
@@ -28,11 +29,12 @@ class JournalController {
         return ResponseEntity.ok(dto);
     }
 
+    // to be used by internal services e.g. emotion classification
     @GetMapping("/{id}/internal")
-    public ResponseEntity<EntryDTO> findByIdInternal(
+    public ResponseEntity<EntryContentDTO> getEntryContentById (
             @PathVariable UUID id
     ) {
-        EntryDTO dto = entryService.findById(id);
+        EntryContentDTO dto = entryService.getEntryContentById(id);
         return ResponseEntity.ok(dto);
     }
 

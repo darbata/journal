@@ -1,5 +1,6 @@
 package io.darbata.journal.services;
 
+import io.darbata.journal.dto.EntryContentDTO;
 import io.darbata.journal.dto.EntryDTO;
 import io.darbata.journal.events.EntryCreatedEvent;
 import io.darbata.journal.exceptions.EntryNotFoundException;
@@ -81,8 +82,17 @@ public class EntryService {
     }
 
     private EntryDTO entryModelToDTO (Entry e) {
-        return new EntryDTO(e.getId(), e.getAuthorId().getId(), e.getTitle(), e.getContent(), e.getEmotions(), e.getCreatedAt(),
-                e.getUpdatedAt());
+        return new EntryDTO(e.getId(), e.getAuthorId().getId(), e.getTitle(), e.getContent(), e.getDominant(),
+                e.getEmotions(), e.isAnalysed(), e.getCreatedAt(), e.getUpdatedAt());
     }
 
+    public EntryContentDTO getEntryContentById(UUID id) {
+        Entry entry = entryRepository.findById(id)
+                .orElseThrow(() -> new EntryNotFoundException("Entry of id " + id + " was not found"));
+
+        return new EntryContentDTO(
+                id,
+                entry.getContent()
+        );
+    }
 }
