@@ -1,16 +1,10 @@
-from datetime import datetime
+from uuid import UUID
+
 from pydantic import BaseModel, ConfigDict
 from pydantic.alias_generators import to_camel
 
-from app.schemas.emotion_classification_result import Emotion
-
-class Entry(BaseModel):
+class EntryContentDTO(BaseModel):
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
-    id: str
-    authorId: str
-    title: str
+    id: UUID
     content: str
-    emotions: dict[Emotion, float] | None = None
-    created_at: datetime
-    updated_at: datetime
