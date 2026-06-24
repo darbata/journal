@@ -1,7 +1,6 @@
 package io.darbata.journal.amqp;
 
 import io.darbata.journal.events.ClassificationEvent;
-import io.darbata.journal.models.EmotionClassificationResult;
 import io.darbata.journal.services.EntryService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,7 @@ public class JournalEventReceiver {
 
         entryService.assignEmotionsById(
                 event.entryId(),
-                new EmotionClassificationResult(event.scores())
+                event.scores()
         );
 
     }

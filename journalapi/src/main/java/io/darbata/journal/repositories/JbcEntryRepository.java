@@ -1,6 +1,6 @@
 package io.darbata.journal.repositories;
 
-import io.darbata.journal.models.EmotionClassificationResult;
+import io.darbata.journal.models.Emotion;
 import io.darbata.journal.models.Entry;
 import io.darbata.journal.models.UserID;
 import org.springframework.jdbc.core.RowMapper;
@@ -94,7 +94,7 @@ public class JbcEntryRepository implements EntryRepository {
     }
 
     @Override
-    public void updateEmotionsById(UUID id, EmotionClassificationResult emotions) {
+    public void updateEmotionsById(UUID id, Map<Emotion, Double> emotions) {
         String sql = """
         UPDATE entries SET emotions = :emotions::jsonb
         WHERE id = :id
@@ -102,7 +102,7 @@ public class JbcEntryRepository implements EntryRepository {
 
         client.sql(sql)
                 .param("id", id)
-                .param("emotions", jsonMapper.writeValueAsString(emotions.scores()))
+                .param("emotions", jsonMapper.writeValueAsString(emotions))
                 .update();
     }
 
@@ -141,10 +141,9 @@ public class JbcEntryRepository implements EntryRepository {
             );
         }
 
-        private EmotionClassificationResult parseEmotionsJson(String json) {
+        private Map<Emotion, Double> parseEmotionsJson(String json) {
             if (json == null) return null;
-            Map<EmotionClassificationResult.Emotion, Double> scores = jsonMapper.readValue(json, new TypeReference<>() {});
-            return new EmotionClassificationResult(scores);
+            return jsonMapper.readValue(json, new TypeReference<>() {});
         }
     }
 }

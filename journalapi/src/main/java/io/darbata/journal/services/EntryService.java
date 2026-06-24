@@ -4,15 +4,15 @@ import io.darbata.journal.dto.EntryDTO;
 import io.darbata.journal.events.EntryCreatedEvent;
 import io.darbata.journal.exceptions.EntryNotFoundException;
 import io.darbata.journal.amqp.JournalEventSender;
-import io.darbata.journal.models.EmotionClassificationResult;
+import io.darbata.journal.models.Emotion;
 import io.darbata.journal.models.Entry;
 import io.darbata.journal.models.UserID;
 import io.darbata.journal.repositories.EntryRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -66,7 +66,7 @@ public class EntryService {
         return entryModelToDTO(entry);
     }
 
-    public void assignEmotionsById(UUID id, EmotionClassificationResult emotions) {
+    public void assignEmotionsById(UUID id, Map<Emotion, Double> emotions) {
         entryRepository.updateEmotionsById(id, emotions);
     }
 

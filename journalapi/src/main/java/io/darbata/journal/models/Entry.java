@@ -3,6 +3,7 @@ package io.darbata.journal.models;
 import org.springframework.boot.jackson.autoconfigure.JacksonProperties.Json;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 public class Entry {
@@ -11,12 +12,12 @@ public class Entry {
     private final UserID authorId;
     private String title;
     private String content;
-    private EmotionClassificationResult emotions;
+    private Map<Emotion, Double> emotions;
     private final Instant createdAt;
     private Instant updatedAt;
 
     private Entry(
-            UUID id, UserID authorId, String title, String content, EmotionClassificationResult emotions,
+            UUID id, UserID authorId, String title, String content, Map<Emotion, Double> emotions,
             Instant createdAt, Instant updatedAt
     ) {
         this.id = id;
@@ -34,7 +35,7 @@ public class Entry {
     }
 
     public static Entry load(
-            UUID id, UserID authorId, String title, String content, EmotionClassificationResult emotions,
+            UUID id, UserID authorId, String title, String content, Map<Emotion, Double> emotions,
             Instant createdAt, Instant updatedAt
     ) {
         return new Entry(id, authorId, title, content, emotions, createdAt, updatedAt);
@@ -60,11 +61,11 @@ public class Entry {
         return content;
     }
 
-    public EmotionClassificationResult getEmotions() {
+    public Map<Emotion, Double> getEmotions() {
         return emotions;
     }
 
-    public void setEmotions(EmotionClassificationResult emotions) {
+    public void setEmotions(Map<Emotion, Double> emotions) {
         this.emotions = emotions;
     }
 

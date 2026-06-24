@@ -1,8 +1,9 @@
 package io.darbata.journal.dto;
 
-import io.darbata.journal.models.EmotionClassificationResult;
+import io.darbata.journal.models.Emotion;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 public record EntryDTO(
@@ -10,7 +11,7 @@ public record EntryDTO(
         String authorId,
         String title,
         String content,
-        EmotionClassificationResult scores,
+        Map<Emotion, Double> scores,
         Instant createdAt,
         Instant updatedAt
 ) { }
