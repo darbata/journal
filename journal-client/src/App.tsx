@@ -1,6 +1,7 @@
 import SidebarMenuItem from "./SidebarMenuItem.tsx";
 import {ChartNoAxesCombined, Library, PencilLine} from "lucide-react";
 import {useState} from "react";
+import WritingPage from "./WritingPage.tsx";
 
 const menu = [
     {icon: PencilLine, label: "Write"},
@@ -16,6 +17,7 @@ export default function App() {
         <div className="h-screen w-screen bg-bg flex text-fg">
             <div className="bg-sidebar w-1/5 p-16">
                 <h2 className="font-serif font-semibold text-4xl mb-16">Margin</h2>
+                {/* sidebar -> TODO: extract to own */}
                 <div className="flex flex-col gap-2">
                     {
                         menu.map(
@@ -27,8 +29,12 @@ export default function App() {
                             />)
                     }
                 </div>
-
             </div>
+
+            <div className="py-32 px-64">
+                <WritingPage today={new Date} />
+            </div>
+
 
 
         </div>

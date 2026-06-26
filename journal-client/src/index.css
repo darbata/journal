@@ -12,7 +12,7 @@
   --color-surface-inset: #F1ECE3;
 
   --color-fg: #34302A;
-  --color-fg-muted: #7C746A;
+  --color-fg-muted: #BCB3A4;
   --color-fg-faint: #BCB3A4;
 
   --color-primary: #79856A;
@@ -27,4 +27,6 @@
   --color-sadness: #A7C0CC;
   --color-surprise: #DBB6B2;
   --color-none: #D8D2C6;
+
+  --tracking-widest: 0.175em;
 }
