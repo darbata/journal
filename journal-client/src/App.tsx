@@ -15,7 +15,7 @@ export default function App() {
 
     return (
         <div className="h-screen w-screen bg-bg flex text-fg">
-            <div className="bg-sidebar w-1/5 p-16">
+            <div className="bg-sidebar p-0 w-0 invisible lg:visible lg:py-8 lg:w-1/3 lg:px-16 2xl:visible 2xl:w-1/5">
                 <h2 className="font-serif font-semibold text-4xl mb-16">Margin</h2>
                 {/* sidebar -> TODO: extract to own */}
                 <div className="flex flex-col gap-2">
@@ -31,10 +31,9 @@ export default function App() {
                 </div>
             </div>
 
-            <div className="py-32 px-64">
-                <WritingPage today={new Date} />
+            <div className="py-32 p-16 lg:pr-16 2xl:pl-64 w-full h-full">
+                <WritingPage today={new Date()} />
             </div>
-
 
 
         </div>
