@@ -2,6 +2,7 @@ import SidebarMenuItem from "./SidebarMenuItem.tsx";
 import {ChartNoAxesCombined, Library, PencilLine} from "lucide-react";
 import {useState} from "react";
 import WritingPage from "./WritingPage.tsx";
+import Content from "./Content.tsx";
 
 const menu = [
     {icon: PencilLine, label: "Write"},
@@ -32,9 +33,8 @@ export default function App() {
             </div>
 
             <div className="py-32 p-16 lg:pr-16 2xl:pl-64 w-full h-full">
-                <WritingPage today={new Date()} />
+                <Content active={active} />
             </div>
-
 
         </div>
     )
