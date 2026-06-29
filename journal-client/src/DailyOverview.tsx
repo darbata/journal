@@ -1,22 +1,13 @@
-import type {Emotion, Entry} from "./LibraryPage.tsx";
+import type {Entry} from "./LibraryPage.tsx";
+import {colourMap} from "./ColourMap.tsx";
 
 type EntryOverviewProps = {
     last: boolean
     entry: Entry
+    onClick: () => void
 }
 
-const colourMap = {
-    anger: "bg-anger",
-    disgust: "bg-disgust",
-    fear: "bg-fear",
-    joy: "bg-joy",
-    neutral: "bg-neutral",
-    sadness: "bg-sadness",
-    surprise: "bg-surprise",
-    none: "bg-none",
-};
-
-export function EntryOverview({last, entry} : EntryOverviewProps) {
+export function EntryOverview({onClick, last, entry} : EntryOverviewProps) {
 
     const time = new Date(entry.createdAt).toLocaleTimeString(
         "en-AU",
@@ -26,7 +17,7 @@ export function EntryOverview({last, entry} : EntryOverviewProps) {
     const colour = colourMap[entry.dominant] ?? "bg-none";
 
     return (
-        <div className={`flex justify-between font-serif text-primary items-center gap-8 py-4 px-8 ${last ? "" : "border-b"}  border-b-fg-muted`}>
+        <div onClick={() => onClick()} className={`flex justify-between font-serif text-primary items-center gap-8 py-4 px-8 ${last ? "" : "border-b"}  border-b-fg-muted`}>
             <span className="shrink-0 font-sans text-lg">{time}</span>
             <div className="w-full text-xl line-clamp-1 px-4">
                 <p>{entry.content}</p>
@@ -39,9 +30,10 @@ export function EntryOverview({last, entry} : EntryOverviewProps) {
 type DailyOverviewProps = {
     date: Date
     entries: Entry[]
+    setOpenEntry: () => void
 }
 
-export default function DailyOverview({date, entries} : DailyOverviewProps) {
+export default function DailyOverview({date, entries, setOpenEntry} : DailyOverviewProps) {
 
     const d = new Date(date);
     const today = new Date(date) == d;
@@ -53,7 +45,7 @@ export default function DailyOverview({date, entries} : DailyOverviewProps) {
                 <span className="text-fg-muted pr-[0.2rem]">{entries.length}</span>
             </div>
             <li className="list-none">
-                {entries.map((e, index) => <EntryOverview last={index == entries.length - 1} entry={e}/>)}
+                {entries.map((e, index) => <EntryOverview onClick={() => setOpenEntry(e)} last={index == entries.length - 1} entry={e}/>)}
             </li>
         </div>
     )

@@ -26,7 +26,7 @@ export default function WritingPage({today} : WritingPageProps) {
             </div>
 
             <textarea
-                className="border-none focus:outline-none font-serif text-4xl w-full h-full overflow-y-scroll resize-none text-primary pr-2 caret-primary"
+                className="border-none focus:outline-none font-serif text-4xl w-full h-full overflow-y-scroll resize-none text-primary pr-2 caret-primary leading-16"
                 placeholder={placeholder}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}

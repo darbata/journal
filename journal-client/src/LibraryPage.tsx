@@ -1,4 +1,6 @@
 import DailyOverview from "./DailyOverview.tsx";
+import {useState} from "react";
+import EntryPage from "./EntryPage.tsx";
 
 export type Emotion =
     | "anger"
@@ -130,7 +132,7 @@ const dto: Entry[] = [
         "id": "b82e616f-520e-4189-9ec9-3a756162a51a",
         "authorId": "daz",
         "title": "Title",
-        "content": "Saw how many people applied to the same internship. Scared I won't even pass the resume screen.",
+        "content": "Couldn't settle all evening. Kept refreshing things that didn't matter, then felt worse for it. I think I was avoiding the email I still haven't answered. Writing it down at least gets it out of the loop in my head.",
         "dominant": "fear",
         "scores": {
             "anger": 0.015340846908061612,
@@ -509,20 +511,33 @@ const dto: Entry[] = [
 ]
 
 export default function LibraryPage() {
+
+    const [openEntry, setOpenEntry] = useState<Entry | null>(null);
+
     const days = new Map<string, Entry[]>();
+    const entries = new Map<string, Entry>();
 
     dto.forEach((entry) => {
         const key = dayKey(entry.createdAt);
         if (!days.has(key)) days.set(key, []);
         days.get(key)!.push(entry);
+
+        entries.set(entry.id, entry);
     });
 
+
+    if (openEntry !== null) {
+        return (
+            <EntryPage close={() => setOpenEntry(null)} entry={openEntry} />
+        )
+    }
+
     return (
-        <div className="flex flex-col gap-12 h-full">
+        <div className={`flex flex-col gap-12 h-full`}>
             <span className="text-4xl text-fg font-serif font-semibold">Journal</span>
             <div className="flex-1 min-h-0 overflow-y-auto pr-4">
                 {[...days].map(([key, entries]) => (
-                    <DailyOverview key={key} date={new Date(key)} entries={entries} />
+                    <DailyOverview key={key} date={new Date(key)} entries={entries} setOpenEntry={setOpenEntry} />
                 ))}
             </div>
         </div>
