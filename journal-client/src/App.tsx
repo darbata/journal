@@ -1,7 +1,6 @@
 import SidebarMenuItem from "./SidebarMenuItem.tsx";
 import {ChartNoAxesCombined, Library, PencilLine} from "lucide-react";
 import {useState} from "react";
-import WritingPage from "./WritingPage.tsx";
 import Content from "./Content.tsx";
 
 const menu = [
@@ -32,8 +31,10 @@ export default function App() {
                 </div>
             </div>
 
-            <div className="py-32 p-16 lg:pr-16 2xl:pl-64 w-full h-full">
-                <Content active={active} />
+            <div className="py-32 px-8 lg:px-16 w-full h-full min-h-0 flex flex-col">
+                <div className="w-full max-w-3xl 2xl:max-w-5xl mx-auto h-full min-h-0 flex flex-col">
+                    <Content active={active} />
+                </div>
             </div>
 
         </div>
