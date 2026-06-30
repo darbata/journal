@@ -13,7 +13,7 @@ export default function SidebarMenuItem({icon: Icon, label, selected, onClick} :
         <div
             className={`
                 flex gap-8 items-center w-full px-4 py-4 rounded-2xl text-fg-muted 
-                transition duration-500
+                transition duration-500 cursor-pointer
                 ${selected ? "bg-surface text-primary drop-shadow-xl" : ""}
                 
             `}

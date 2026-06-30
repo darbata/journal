@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {NotebookPen} from "lucide-react";
+import {createEntry} from "./api/methods.ts";
 
 const placeholders = [
     "What's on your mind?"
@@ -12,10 +13,20 @@ type WritingPageProps = {
 export default function WritingPage({today} : WritingPageProps) {
 
     const [content, setContent] = useState("");
+    const [sending, setSending] = useState(false);
 
     const [placeholder, setPlaceholder] = useState(
         () => placeholders[Math.floor(Math.random() * placeholders.length)]
     );
+
+    const handleSaveEntry = async () => {
+        if (content.length === 0 || sending) return;
+
+        setSending(true)
+        await createEntry(content);
+        setContent("")
+        setSending(false)
+    }
 
     return (
         <div className="flex flex-col gap-16 w-full h-full">
@@ -32,7 +43,10 @@ export default function WritingPage({today} : WritingPageProps) {
                 onChange={(e) => setContent(e.target.value)}
             />
 
-            <button className="absolute bottom-32 right-16 xs:right-32 lg:right-48 2xl:right-64 rounded-full bg-accent text-surface drop-shadow-2xl p-6">
+            <button
+                className={`absolute bottom-32 right-16 xs:right-32 lg:right-48 2xl:right-64 rounded-full bg-accent text-surface drop-shadow-2xl p-6 hover:bg-accent/30 transition ${sending || content.length === 0 ? "opacity-0 cursor-not-allowed" : "cursor-none"}`}
+                onClick={handleSaveEntry}
+            >
                 <NotebookPen size="28" className="shrink-0"/>
             </button>
         </div>

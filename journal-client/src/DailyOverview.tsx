@@ -38,8 +38,6 @@ export default function DailyOverview({date, entries, setOpenEntry} : DailyOverv
     const d = new Date(date);
     const today = sameDay(d, date)
 
-    console.log(today)
-
     return (
         <div className="flex flex-col w-full bg-surface font-serif rounded-2xl overflow-hidden mb-8">
             <div className="flex items-center justify-between border-b border-b-fg-muted py-4 px-8">
