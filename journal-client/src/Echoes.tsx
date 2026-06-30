@@ -6,10 +6,19 @@ type EchoesProps = {
 
 export default function Echoes({echoes}: EchoesProps) {
 
+
+
     return (
         <div className="border-l p-8">
             <span className="font-sans font-semibold text-fg-faint tracking-wider text-lg">ECHOES</span>
 
+            {
+                echoes && <div></div>
+            }
+
+            {
+                !echoes && <div></div>
+            }
 
         </div>
     )
