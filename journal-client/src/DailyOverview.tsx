@@ -17,7 +17,7 @@ export function EntryOverview({onClick, last, entry} : EntryOverviewProps) {
     const colour = colourMap[entry.dominant] ?? "bg-none";
 
     return (
-        <div onClick={() => onClick()} className={`flex justify-between font-serif text-primary items-center gap-8 py-4 px-8 ${last ? "" : "border-b"}  border-b-fg-muted`}>
+        <div onClick={() => onClick()} className={`flex justify-between font-serif text-primary items-center gap-8 py-4 px-8 ${last ? "" : "border-b"}  border-b-fg-muted cursor-pointer hover:bg-accent/20 transition-colors`}>
             <span className="shrink-0 font-sans text-lg">{time}</span>
             <div className="w-full text-xl line-clamp-1 px-4">
                 <p>{entry.content}</p>
