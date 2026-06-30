@@ -1,8 +1,8 @@
 # Journal Application
 
-<img width="1666" height="649" alt="Screenshot from 2026-06-30 14-03-29" src="https://github.com/user-attachments/assets/fdbd68be-cb43-40fb-b6cb-cfcdca2cee4c" />
-
 A web application designed for no friction journaling. The user experience involves a minimal writing experience, analysis of entries is done in the background asynchronously using an ML (non-LLM) model.
+
+<img width="1666" height="649" alt="Screenshot from 2026-06-30 14-03-29" src="https://github.com/user-attachments/assets/fdbd68be-cb43-40fb-b6cb-cfcdca2cee4c" />
 
 ## Why did I build this?
 - To learn how to deploy an ML model -> used hugging face model, installed weights and wrapped model behind endpoints using FastAPI, then containerised both FastAPI application and weights.
