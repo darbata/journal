@@ -1,12 +1,12 @@
 import SidebarMenuItem from "./SidebarMenuItem.tsx";
-import {ChartNoAxesCombined, Library, PencilLine} from "lucide-react";
+import {Library, PencilLine} from "lucide-react";
 import {useState} from "react";
 import Content from "./Content.tsx";
 
 const menu = [
     {icon: PencilLine, label: "Write"},
     {icon: Library, label: "Library"},
-    {icon: ChartNoAxesCombined, label: "Trends"}
+    // {icon: ChartNoAxesCombined, label: "Trends"}
 ]
 
 export default function App() {
