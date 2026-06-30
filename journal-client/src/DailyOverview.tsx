@@ -36,12 +36,14 @@ type DailyOverviewProps = {
 export default function DailyOverview({date, entries, setOpenEntry} : DailyOverviewProps) {
 
     const d = new Date(date);
-    const today = new Date(date) == d;
+    const today = sameDay(d, date)
+
+    console.log(today)
 
     return (
         <div className="flex flex-col w-full bg-surface font-serif rounded-2xl overflow-hidden mb-8">
             <div className="flex items-center justify-between border-b border-b-fg-muted py-4 px-8">
-                <span className="text-3xl font-semibold">{` ${today ? "Today - " : ""} ${d.toLocaleString('default', {month: 'long'})} ${d.getDate()}`}</span>
+                <span className="text-3xl font-semibold">{` ${today ? "Today - " : ""}  ${d.toLocaleString("default", {month: 'long'})} ${d.getDate()}`}</span>
                 <span className="text-fg-muted pr-[0.2rem]">{entries.length}</span>
             </div>
             <li className="list-none">
@@ -49,4 +51,10 @@ export default function DailyOverview({date, entries, setOpenEntry} : DailyOverv
             </li>
         </div>
     )
+}
+
+function sameDay(d1: Date, d2: Date) {
+    return d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate();
 }

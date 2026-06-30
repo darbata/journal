@@ -70,5 +70,5 @@ export default function LibraryPage() {
 
 function dayKey(instant: string): string {
     const d = new Date(instant);
-    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    return `${d.getFullYear()}-${d.toLocaleString("default", {month: 'long'})} ${d.getDate()}`;
 }
