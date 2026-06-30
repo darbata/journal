@@ -30,7 +30,7 @@ export function EntryOverview({onClick, last, entry} : EntryOverviewProps) {
 type DailyOverviewProps = {
     date: Date
     entries: Entry[]
-    setOpenEntry: () => void
+    setOpenEntry: (e: Entry) => void
 }
 
 export default function DailyOverview({date, entries, setOpenEntry} : DailyOverviewProps) {
