@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/entries")
+@CrossOrigin("http://localhost:5173/")
 class JournalController {
 
     private final EntryService entryService;
