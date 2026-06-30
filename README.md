@@ -1,4 +1,8 @@
+<img width="1666" height="649" alt="Screenshot from 2026-06-30 14-03-29" src="https://github.com/user-attachments/assets/fdbd68be-cb43-40fb-b6cb-cfcdca2cee4c" />
+
 # Journal Application
+
+<img width="1666" height="649" alt="Screenshot from 2026-06-30 14-03-12" src="https://github.com/user-attachments/assets/c221cd5a-011c-4923-8d92-b02cccef0afa" />
 
 A web application designed for no friction journaling. The user experience involves a minimal writing experience, analysis of entries is done in the background asynchronously using an ML (non-LLM) model.
 
@@ -7,7 +11,7 @@ A web application designed for no friction journaling. The user experience invol
     - This led to a heavy ~1Gb image, will look into if this can be downsized or not.
 - Interesting Kubernetes deployment scenario, where ML model pods should sit on worker nodes that have access to a GPU.
 - I believe it's a genuinely useful application.
-- Want to avoid costs associated with LLM API's while still being able to achive comparable application features.
+- Want to avoid costs associated with LLM API's while still being able to achieve comparable application features.
 
 ## Current features
 - User can write entries - CRUD via Spring Boot.
@@ -16,5 +20,5 @@ A web application designed for no friction journaling. The user experience invol
 
 ## Future features - and potential technical solutions
 - User can view the trends associated with their entries and emotions - SQL Queries.
-- User can view entries that are semantically and emotionally similar to a given entry - Vector Database + Vector Qeury (`pg_vector`).
+- User can view entries that are semantically and emotionally similar to a given entry - Vector Database + Vector Query (`pg_vector`).
 - User can dictate their entries - Frontend microphone access, transcription service in backend likely.
