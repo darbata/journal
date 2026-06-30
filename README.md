@@ -1,8 +1,6 @@
-<img width="1666" height="649" alt="Screenshot from 2026-06-30 14-03-29" src="https://github.com/user-attachments/assets/fdbd68be-cb43-40fb-b6cb-cfcdca2cee4c" />
-
 # Journal Application
 
-<img width="1666" height="649" alt="Screenshot from 2026-06-30 14-03-12" src="https://github.com/user-attachments/assets/c221cd5a-011c-4923-8d92-b02cccef0afa" />
+<img width="1666" height="649" alt="Screenshot from 2026-06-30 14-03-29" src="https://github.com/user-attachments/assets/fdbd68be-cb43-40fb-b6cb-cfcdca2cee4c" />
 
 A web application designed for no friction journaling. The user experience involves a minimal writing experience, analysis of entries is done in the background asynchronously using an ML (non-LLM) model.
 
