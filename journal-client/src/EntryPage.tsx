@@ -1,6 +1,7 @@
 import type {Emotion, Entry} from "./LibraryPage.tsx";
 import {ChevronLeft} from "lucide-react";
-import {colourMap} from "./ColourMap.tsx";
+import {colourMap, colourMapFaint} from "./ColourMap.tsx";
+import Echoes from "./Echoes.tsx";
 
 const dto: Entry = {
     "id": "b82e616f-520e-4189-9ec9-3a756162a51a",
@@ -22,6 +23,8 @@ const dto: Entry = {
     "updatedAt": "2026-06-18T16:25:13.957492Z"
 }
 
+const echoes : Entry[] = {}
+
 type EntryPageProps = {
     close: () => null
     entry: Entry
@@ -33,7 +36,6 @@ export default function EntryPage({close, entry} : EntryPageProps) {
 
     return (
         <div className="flex">
-
             <div className="p-8">
                 <div className="flex items-center gap-8 text-fg-muted mb-8">
                     <ChevronLeft size="28" className="cursor-pointer" onClick={() => close()}/>
@@ -43,19 +45,13 @@ export default function EntryPage({close, entry} : EntryPageProps) {
                 </div>
                 <p className="text-fg font-serif text-4xl mb-8 leading-16">{entry.content}</p>
                 <div className="flex flex-col gap-2">
-                    <span className="font-sans text-fg-muted text-md tracking-widest">FELT LIKE</span>
-                    <span className={`${colourMap[entry.dominant]} px-4 text-lg`}>{entry.dominant}</span>
+                    <span className="font-sans text-fg-muted text-md tracking-widest mb-2">FELT LIKE</span>
+                    <div className={`${colourMapFaint[entry.dominant]} bg-opacity-70 flex items-center gap-2 w-fit py-2 px-6 rounded-3xl`}>
+                        <span className={`${colourMap[entry.dominant]} text-lg rounded-full h-3 w-3`}></span>
+                        <span className="font-sans text-lg tracking-wider">{entry.dominant}</span>
+                    </div>
                 </div>
             </div>
-
-            {/*
-                For when Echoes is implemented (vector store +
-                <div className="border-l p-8">
-                    <span className="font-sans font-semibold text-fg-faint tracking-wider text-lg">ECHOES</span>
-                </div>
-            */}
-
-
         </div>
 
     )
