@@ -7,6 +7,7 @@ import io.darbata.journal.dto.UpdateEntryRequest;
 import io.darbata.journal.services.EntryService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/entries")
-@CrossOrigin("http://localhost:5173/")
+@CrossOrigin(origins = {"${journal.client.url}"})
 class JournalController {
 
     private final EntryService entryService;
