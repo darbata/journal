@@ -4,6 +4,8 @@ import io.darbata.journal.dto.CreateEntryRequest;
 import io.darbata.journal.dto.EntryContentDTO;
 import io.darbata.journal.dto.EntryDTO;
 import io.darbata.journal.services.EntryService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +53,7 @@ class JournalController {
     @PostMapping("")
     public ResponseEntity<EntryDTO> createEntry(
             @RequestHeader("X-User") String authorId,
-            @RequestBody CreateEntryRequest request
+            @Valid @NotBlank @RequestBody CreateEntryRequest request
     ) {
         EntryDTO dto = entryService.create(authorId, request.title(), request.content());
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
