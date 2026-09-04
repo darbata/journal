@@ -3,6 +3,7 @@ package io.darbata.journal.controllers;
 import io.darbata.journal.dto.CreateEntryRequest;
 import io.darbata.journal.dto.EntryContentDTO;
 import io.darbata.journal.dto.EntryDTO;
+import io.darbata.journal.dto.UpdateEntryRequest;
 import io.darbata.journal.services.EntryService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -66,6 +67,15 @@ class JournalController {
     ) {
         entryService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/entries/{id}")
+    public ResponseEntity<?> updateById(
+            @RequestHeader("X-User") String userId,
+            @PathVariable UUID id,
+            @Valid @NotBlank @RequestBody UpdateEntryRequest request
+    ) {
+        return ResponseEntity.ok(entryService.updateById(id, request.title(), request.content()));
     }
 
 

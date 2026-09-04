@@ -1,6 +1,5 @@
 package io.darbata.journal.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record CreateEntryRequest (
