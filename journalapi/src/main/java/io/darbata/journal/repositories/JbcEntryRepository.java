@@ -39,7 +39,7 @@ public class JbcEntryRepository implements EntryRepository {
 
         client.sql(sql)
                 .param("id", entry.getId())
-                .param("authorId", entry.getAuthorId().getId())
+                .param("authorId", entry.getAuthorId().value())
                 .param("title", entry.getTitle())
                 .param("content", entry.getContent())
                 .param("createdAt", entry.getCreatedAt().atOffset(ZoneOffset.UTC))
@@ -71,7 +71,7 @@ public class JbcEntryRepository implements EntryRepository {
         """;
 
         return client.sql(sql)
-                .param("id", userID.getId())
+                .param("id", userID.value())
                 .param("from", from.atOffset(ZoneOffset.UTC))
                 .param("limit", limit)
                 .query(new EntryRowMapper(jsonMapper))
@@ -120,7 +120,7 @@ public class JbcEntryRepository implements EntryRepository {
 
             return Entry.load(
                     rs.getObject("id", UUID.class),
-                    UserID.of(rs.getString("author_id")),
+                    new UserID(rs.getString("author_id")),
                     rs.getString("title"),
                     rs.getString("content"),
                     parseEmotionsJson(rs.getString("emotions")),

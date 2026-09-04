@@ -1,19 +1,11 @@
 package io.darbata.journal.models;
 
-public class UserID {
-
-    private String id;
-
-    private UserID (String id) {
-        this.id = id;
+public record UserID (
+        String value
+) {
+    public UserID {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("UserID cannot be null");
+        }
     }
-
-    public static UserID of (String id) {
-        return new UserID(id);
-    }
-
-    public String getId() {
-        return this.id;
-    }
-
 }

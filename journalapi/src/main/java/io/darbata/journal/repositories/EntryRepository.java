@@ -1,13 +1,11 @@
 package io.darbata.journal.repositories;
 
-import io.darbata.journal.models.Emotion;
 import io.darbata.journal.models.Entry;
 import io.darbata.journal.models.UserID;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
