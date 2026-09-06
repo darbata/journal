@@ -3,7 +3,11 @@ package io.darbata.journal.controllers;
 import io.darbata.journal.dto.CreateEntryRequest;
 import io.darbata.journal.dto.EntryContentDTO;
 import io.darbata.journal.dto.EntryDTO;
+import io.darbata.journal.dto.UpdateEntryRequest;
 import io.darbata.journal.services.EntryService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/entries")
-@CrossOrigin("http://localhost:5173/")
+@CrossOrigin(origins = {"${journal.client.url}"})
 class JournalController {
 
     private final EntryService entryService;
@@ -51,7 +55,7 @@ class JournalController {
     @PostMapping("")
     public ResponseEntity<EntryDTO> createEntry(
             @RequestHeader("X-User") String authorId,
-            @RequestBody CreateEntryRequest request
+            @Valid @NotBlank @RequestBody CreateEntryRequest request
     ) {
         EntryDTO dto = entryService.create(authorId, request.title(), request.content());
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
@@ -64,6 +68,15 @@ class JournalController {
     ) {
         entryService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/entries/{id}")
+    public ResponseEntity<?> updateById(
+            @RequestHeader("X-User") String userId,
+            @PathVariable UUID id,
+            @Valid @NotBlank @RequestBody UpdateEntryRequest request
+    ) {
+        return ResponseEntity.ok(entryService.updateById(id, request.title(), request.content()));
     }
 
 

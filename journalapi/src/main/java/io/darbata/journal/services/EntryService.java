@@ -28,7 +28,7 @@ public class EntryService {
     }
 
     public EntryDTO create(String authorId, String title, String content) {
- Entry entry = Entry.create(UserID.of(authorId), title, content);
+ Entry entry = Entry.create(new UserID(authorId), title, content);
 
         this.entryRepository.create(entry);
 
@@ -47,7 +47,7 @@ public class EntryService {
     public List<EntryDTO> findAllByUserId(String userId) {
         // TODO: time based pagination
         int paginationLimit = 50;
-        UserID user = UserID.of(userId);
+        UserID user = new UserID(userId);
         List<Entry> entries = entryRepository.findAllByUserID(user, Instant.now(), paginationLimit);
         return entries.stream()
                 .map(this::entryModelToDTO)
@@ -82,7 +82,7 @@ public class EntryService {
     }
 
     private EntryDTO entryModelToDTO (Entry e) {
-        return new EntryDTO(e.getId(), e.getAuthorId().getId(), e.getTitle(), e.getContent(), e.getDominant(),
+        return new EntryDTO(e.getId(), e.getAuthorId().value(), e.getTitle(), e.getContent(), e.getDominant(),
                 e.getEmotions(), e.isAnalysed(), e.getCreatedAt(), e.getUpdatedAt());
     }
 

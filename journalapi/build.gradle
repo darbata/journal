@@ -24,6 +24,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.boot:spring-boot-starter-json'
     implementation 'org.postgresql:postgresql'
+    implementation 'org.hibernate.validator:hibernate-validator'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-security-oauth2-jose'
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
