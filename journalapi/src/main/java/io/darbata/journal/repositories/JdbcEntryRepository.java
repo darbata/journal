@@ -20,12 +20,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class JbcEntryRepository implements EntryRepository {
+public class JdbcEntryRepository implements EntryRepository {
 
     private final JdbcClient client;
     private final JsonMapper jsonMapper;
 
-    public JbcEntryRepository(JdbcClient client, JsonMapper jsonMapper) {
+    public JdbcEntryRepository(JdbcClient client, JsonMapper jsonMapper) {
         this.client = client;
         this.jsonMapper = jsonMapper;
     }
