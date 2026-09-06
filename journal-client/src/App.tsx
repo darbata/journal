@@ -2,6 +2,8 @@ import SidebarMenuItem from "./SidebarMenuItem.tsx";
 import {Library, PencilLine} from "lucide-react";
 import {useState} from "react";
 import Content from "./Content.tsx";
+import {useAuth} from "react-oidc-context";
+import {Navigate, useLocation} from "react-router";
 
 const menu = [
     {icon: PencilLine, label: "Write"},
@@ -11,7 +13,20 @@ const menu = [
 
 export default function App() {
 
+    const { user } = useAuth();
+    const location = useLocation();
+
     const [active, setActive] = useState(menu[0].label);
+
+    console.log(user)
+
+    if (user === undefined) return "waiting";
+
+    console.log(user)
+
+    if (user == null) {
+        return <Navigate to ="/login" replace state={{from: location}}/>
+    }
 
     return (
         <div className="h-screen w-screen bg-bg flex text-fg">
