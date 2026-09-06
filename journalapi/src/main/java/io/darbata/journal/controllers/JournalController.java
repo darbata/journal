@@ -18,7 +18,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/entries")
-@CrossOrigin(origins = {"${journal.client.url}"})
 class JournalController {
 
     private final EntryService entryService;
@@ -80,7 +79,4 @@ class JournalController {
     ) {
         return ResponseEntity.ok(entryService.updateById(jwt.getSubject(), entryId, request.title(), request.content()));
     }
-
-
-
 }
