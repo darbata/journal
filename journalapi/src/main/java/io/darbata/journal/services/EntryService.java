@@ -5,6 +5,7 @@ import io.darbata.journal.dto.EntryDTO;
 import io.darbata.journal.events.EntryCreatedEvent;
 import io.darbata.journal.exceptions.EntryNotFoundException;
 import io.darbata.journal.amqp.JournalEventSender;
+import io.darbata.journal.exceptions.UnauthorisedAccessException;
 import io.darbata.journal.models.Emotion;
 import io.darbata.journal.models.Entry;
 import io.darbata.journal.models.UserID;
@@ -37,10 +38,15 @@ public class EntryService {
         return entryModelToDTO(entry);
     }
 
-    public EntryDTO findById(UUID id) {
+    public EntryDTO findById(String userId, UUID id) {
+        UserID user = new UserID(userId);
+
         Entry entry = this.entryRepository.findById(id)
                 .orElseThrow(() -> new EntryNotFoundException("Entry of id " + id + " was not found"));
 
+        if (!user.equals(entry.getAuthorId())) {
+            throw new UnauthorisedAccessException("User may not view this entry");
+        }
         return entryModelToDTO(entry);
     }
 
@@ -54,9 +60,15 @@ public class EntryService {
                 .toList();
     }
 
-    public EntryDTO updateById(UUID id, String updatedTitle, String updatedContent) {
-        Entry entry = this.entryRepository.findById(id)
+    public EntryDTO updateById(String id, UUID entryId, String updatedTitle, String updatedContent) {
+        UserID userId = new UserID(id);
+
+        Entry entry = this.entryRepository.findById(entryId)
                 .orElseThrow(() -> new EntryNotFoundException("Entry of id " + id + " was not found"));
+
+        if (userId.equals(entry.getAuthorId())) {
+            throw new UnauthorisedAccessException("User may not access this entry");
+        }
 
         entry.setTitle(updatedTitle);
         entry.setContent(updatedContent);
@@ -77,8 +89,16 @@ public class EntryService {
         this.entryRepository.update(entry);
     }
 
-    public void delete(UUID id) {
-        this.entryRepository.delete(id);
+    public void delete(String id, UUID entryId) {
+        UserID userId = new UserID(id);
+
+        Entry entry = this.entryRepository.findById(entryId)
+                .orElseThrow(() -> new EntryNotFoundException("Entry of id " + entryId + " was not found"));
+
+        if (userId.equals(entry.getAuthorId())) {
+            throw new UnauthorisedAccessException("User may not access this entry");
+        }
+        this.entryRepository.delete(entryId);
     }
 
     private EntryDTO entryModelToDTO (Entry e) {

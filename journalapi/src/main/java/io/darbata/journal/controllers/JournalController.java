@@ -7,9 +7,10 @@ import io.darbata.journal.dto.UpdateEntryRequest;
 import io.darbata.journal.services.EntryService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,12 +29,13 @@ class JournalController {
 
     @GetMapping("")
     public ResponseEntity<List<EntryDTO>> findAllEntriesByUserId(
-            @RequestHeader("X-User") String userId
+            @AuthenticationPrincipal Jwt jwt
     ) {
-        List<EntryDTO> dto = entryService.findAllByUserId(userId);
+        List<EntryDTO> dto = entryService.findAllByUserId(jwt.getSubject());
         return ResponseEntity.ok(dto);
     }
 
+    // TODO: move to SQS
     // to be used by internal services e.g. emotion classification
     @GetMapping("/{id}/internal")
     public ResponseEntity<EntryContentDTO> getEntryContentById (
@@ -43,40 +45,40 @@ class JournalController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{entryId}")
     public ResponseEntity<EntryDTO> findById(
-            @RequestHeader("X-User") String userId,
-            @PathVariable UUID id
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID entryId
     ) {
-        EntryDTO dto = entryService.findById(id);
+        EntryDTO dto = entryService.findById(jwt.getSubject(), entryId);
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping("")
     public ResponseEntity<EntryDTO> createEntry(
-            @RequestHeader("X-User") String authorId,
+            @AuthenticationPrincipal Jwt jwt,
             @Valid @NotBlank @RequestBody CreateEntryRequest request
     ) {
-        EntryDTO dto = entryService.create(authorId, request.title(), request.content());
+        EntryDTO dto = entryService.create(jwt.getSubject(), request.title(), request.content());
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{entryId}")
     public ResponseEntity<?> deleteById(
-            @RequestHeader("X-User") String userId,
-            @PathVariable UUID id
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID entryId
     ) {
-        entryService.delete(id);
+        entryService.delete(jwt.getSubject(), entryId);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/entries/{id}")
+    @PutMapping("/entries/{entryId}")
     public ResponseEntity<?> updateById(
-            @RequestHeader("X-User") String userId,
-            @PathVariable UUID id,
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID entryId,
             @Valid @NotBlank @RequestBody UpdateEntryRequest request
     ) {
-        return ResponseEntity.ok(entryService.updateById(id, request.title(), request.content()));
+        return ResponseEntity.ok(entryService.updateById(jwt.getSubject(), entryId, request.title(), request.content()));
     }
 
 
