@@ -4,22 +4,20 @@ import App from './App.tsx'
 import { AuthProvider} from "react-oidc-context";
 import {BrowserRouter, Routes, Route} from "react-router";
 import LoginPage from "./LoginPage.tsx";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {onSigninCallback, userManager} from "./auth.ts";
 
-const cognitoAuthConfig = {
-    authority: "https://cognito-idp.ap-southeast-2.amazonaws.com/ap-southeast-2_fDTsChi0x",
-    client_id: "1onomim5pu4st1ovou2v12v8v1",
-    redirect_uri: "http://localhost:5173/",
-    response_type: "code",
-    scope: "email openid phone",
-};
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
-      <AuthProvider {...cognitoAuthConfig}>
-          <Routes>
-              <Route path="/" element={<App />} />
-              <Route path="/login" element = {<LoginPage />} />
-          </Routes>
+      <AuthProvider userManager={userManager} onSigninCallback={onSigninCallback}>
+          <QueryClientProvider client={queryClient}>
+              <Routes>
+                  <Route path="/" element={<App />} />
+                  <Route path="/login" element = {<LoginPage />} />
+              </Routes>
+          </QueryClientProvider>
       </AuthProvider>
   </BrowserRouter>
 )

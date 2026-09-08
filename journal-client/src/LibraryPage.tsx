@@ -1,7 +1,9 @@
 import DailyOverview from "./DailyOverview.tsx";
 import {useState} from "react";
 import EntryPage from "./EntryPage.tsx";
-import {useEntries} from "./hooks/useEntries.ts";
+import {useQuery} from "@tanstack/react-query";
+import {getEntries} from "./api/methods.ts";
+import {useAuth} from "react-oidc-context";
 
 export type Emotion =
     | "anger"
@@ -35,13 +37,26 @@ export type Entry =
 
 export default function LibraryPage() {
 
-    const dto = useEntries()
+    const auth = useAuth();
+
+    const {data, isPending, isError} = useQuery({
+        queryKey: ['entries'],
+        queryFn: getEntries,
+        enabled: auth.isAuthenticated,
+    });
+
     const [openEntry, setOpenEntry] = useState<Entry | null>(null);
+
+    if (isPending) return <span>Loading...</span>
+    if (isError) return <span>Couldn't load entries</span>
+
+
+
     const days = new Map<string, Entry[]>();
     const entries = new Map<string, Entry>();
 
-    if (dto != null) {
-        dto.forEach((entry) => {
+    if (data != null) {
+        data.forEach((entry) => {
             const key = dayKey(entry.createdAt);
             if (!days.has(key)) days.set(key, []);
             days.get(key)!.push(entry);
