@@ -36,11 +36,11 @@ class JournalController {
 
     // TODO: move to SQS
     // to be used by internal services e.g. emotion classification
-    @GetMapping("/{id}/internal")
+    @GetMapping("/{entryId}/internal")
     public ResponseEntity<EntryContentDTO> getEntryContentById (
-            @PathVariable UUID id
+            @PathVariable UUID entryId
     ) {
-        EntryContentDTO dto = entryService.getEntryContentById(id);
+        EntryContentDTO dto = entryService.getEntryContentById(entryId);
         return ResponseEntity.ok(dto);
     }
 
@@ -71,7 +71,7 @@ class JournalController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/entries/{entryId}")
+    @PutMapping("/{entryId}")
     public ResponseEntity<?> updateById(
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable UUID entryId,

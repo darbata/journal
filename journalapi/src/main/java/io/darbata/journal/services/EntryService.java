@@ -66,7 +66,7 @@ public class EntryService {
         Entry entry = this.entryRepository.findById(entryId)
                 .orElseThrow(() -> new EntryNotFoundException("Entry of id " + id + " was not found"));
 
-        if (userId.equals(entry.getAuthorId())) {
+        if (!userId.equals(entry.getAuthorId())) {
             throw new UnauthorisedAccessException("User may not access this entry");
         }
 
@@ -95,7 +95,7 @@ public class EntryService {
         Entry entry = this.entryRepository.findById(entryId)
                 .orElseThrow(() -> new EntryNotFoundException("Entry of id " + entryId + " was not found"));
 
-        if (userId.equals(entry.getAuthorId())) {
+        if (!userId.equals(entry.getAuthorId())) {
             throw new UnauthorisedAccessException("User may not access this entry");
         }
         this.entryRepository.delete(entryId);
@@ -106,12 +106,14 @@ public class EntryService {
                 e.getEmotions(), e.isAnalysed(), e.getCreatedAt(), e.getUpdatedAt());
     }
 
-    public EntryContentDTO getEntryContentById(UUID id) {
-        Entry entry = entryRepository.findById(id)
-                .orElseThrow(() -> new EntryNotFoundException("Entry of id " + id + " was not found"));
+    // used internally
+    // TODO: remove
+    public EntryContentDTO getEntryContentById(UUID entryId) {
+        Entry entry = entryRepository.findById(entryId)
+                .orElseThrow(() -> new EntryNotFoundException("Entry of id " + entryId + " was not found"));
 
         return new EntryContentDTO(
-                id,
+                entryId,
                 entry.getContent()
         );
     }
