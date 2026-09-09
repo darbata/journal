@@ -4,7 +4,6 @@ import io.darbata.journal.dto.EntryContentDTO;
 import io.darbata.journal.dto.EntryDTO;
 import io.darbata.journal.events.EntryCreatedEvent;
 import io.darbata.journal.exceptions.EntryNotFoundException;
-import io.darbata.journal.amqp.JournalEventSender;
 import io.darbata.journal.exceptions.UnauthorisedAccessException;
 import io.darbata.journal.models.Emotion;
 import io.darbata.journal.models.Entry;
