@@ -1,5 +1,5 @@
 package io.darbata.journal.messaging;
 
-interface EventPublisher {
+public interface EventPublisher {
     void publish(JournalEvent event);
 }

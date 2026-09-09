@@ -2,9 +2,10 @@ package io.darbata.journal.services;
 
 import io.darbata.journal.dto.EntryContentDTO;
 import io.darbata.journal.dto.EntryDTO;
-import io.darbata.journal.events.EntryCreatedEvent;
 import io.darbata.journal.exceptions.EntryNotFoundException;
 import io.darbata.journal.exceptions.UnauthorisedAccessException;
+import io.darbata.journal.messaging.EntryCreatedEvent;
+import io.darbata.journal.messaging.EventPublisher;
 import io.darbata.journal.models.Emotion;
 import io.darbata.journal.models.Entry;
 import io.darbata.journal.models.UserID;
@@ -20,19 +21,19 @@ import java.util.UUID;
 public class EntryService {
 
     private final EntryRepository entryRepository;
-    private final JournalEventSender journalEventSender;
+    private final EventPublisher publisher;
 
-    public EntryService(EntryRepository entryRepository, JournalEventSender journalEventSender) {
+    public EntryService(EntryRepository entryRepository, EventPublisher publisher) {
         this.entryRepository = entryRepository;
-        this.journalEventSender = journalEventSender;
+        this.publisher = publisher;
     }
 
     public EntryDTO create(String authorId, String title, String content) {
  Entry entry = Entry.create(new UserID(authorId), title, content);
-
         this.entryRepository.create(entry);
 
-        journalEventSender.sendEntryCreatedEvent(EntryCreatedEvent.from(entry.getId()));
+        EntryCreatedEvent event = new EntryCreatedEvent(entry.getId().toString(), entry.getCreatedAt());
+        publisher.publish(event);
 
         return entryModelToDTO(entry);
     }
