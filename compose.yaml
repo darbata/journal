@@ -15,17 +15,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-  broker:
-    image: rabbitmq:4.3.2-management
-    ports:
-      - "5672:5672"
-      - "15672:15672" # for browser management interface
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 10s
   journalapi:
     image: journalapi:0.0.1-SNAPSHOT
     ports:
