@@ -1,10 +1,10 @@
 package io.darbata.journal.messaging;
 
-import java.time.Instant;
+import org.apache.logging.log4j.CloseableThreadContext;
 
-public record EntryCreatedEvent (String entryId, Instant occurredAt) implements JournalEvent {
+public record EntryCreatedEvent (String entryId, CloseableThreadContext.Instance occurredAt) implements JournalEvent  {
     @Override
     public String type() {
-        return "journal.entry.created";
+        return "journal..entry.created";
     }
 }
